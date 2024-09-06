@@ -13,6 +13,8 @@
 		BE221FEE2C8B07A200D2EAC7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BE221FED2C8B07A200D2EAC7 /* Base */; };
 		BE221FFC2C8B085500D2EAC7 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE221FFB2C8B085500D2EAC7 /* AppRouter.swift */; };
 		BE221FFE2C8B085A00D2EAC7 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE221FFD2C8B085A00D2EAC7 /* AppContainer.swift */; };
+		BE5520EE2C8B0CF8009A8BF2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5520ED2C8B0CF8009A8BF2 /* LoginViewController.swift */; };
+		BE5520F02C8B6A59009A8BF2 /* LoginInputFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		BE221FEF2C8B07A200D2EAC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE221FFB2C8B085500D2EAC7 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		BE221FFD2C8B085A00D2EAC7 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		BE5520ED2C8B0CF8009A8BF2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInputFieldsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,7 @@
 		BE221FF72C8B07B000D2EAC7 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				BE5520EC2C8B0CE5009A8BF2 /* Login */,
 				BE221FF92C8B07DC00D2EAC7 /* Onboarding */,
 				BE221FF82C8B07B400D2EAC7 /* Launch */,
 			);
@@ -105,6 +110,15 @@
 				BE221FE52C8B07A100D2EAC7 /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		BE5520EC2C8B0CE5009A8BF2 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				BE5520ED2C8B0CF8009A8BF2 /* LoginViewController.swift */,
+				BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,9 +191,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE5520F02C8B6A59009A8BF2 /* LoginInputFieldsView.swift in Sources */,
 				BE221FE62C8B07A100D2EAC7 /* OnboardingViewController.swift in Sources */,
 				BE221FFE2C8B085A00D2EAC7 /* AppContainer.swift in Sources */,
 				BE221FE22C8B07A100D2EAC7 /* AppDelegate.swift in Sources */,
+				BE5520EE2C8B0CF8009A8BF2 /* LoginViewController.swift in Sources */,
 				BE221FFC2C8B085500D2EAC7 /* AppRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
