@@ -15,6 +15,9 @@
 		BE221FFE2C8B085A00D2EAC7 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE221FFD2C8B085A00D2EAC7 /* AppContainer.swift */; };
 		BE5520EE2C8B0CF8009A8BF2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5520ED2C8B0CF8009A8BF2 /* LoginViewController.swift */; };
 		BE5520F02C8B6A59009A8BF2 /* LoginInputFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */; };
+		BE8FA7752C8CB382005A03F6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE8FA7742C8CB382005A03F6 /* Images.xcassets */; };
+		BE8FA7772C8CB3B0005A03F6 /* OnboardItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8FA7762C8CB3B0005A03F6 /* OnboardItemViewController.swift */; };
+		BE8FA77A2C8CB720005A03F6 /* OnboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8FA7792C8CB720005A03F6 /* OnboardItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		BE221FFD2C8B085A00D2EAC7 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		BE5520ED2C8B0CF8009A8BF2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInputFieldsView.swift; sourceTree = "<group>"; };
+		BE8FA7742C8CB382005A03F6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		BE8FA7762C8CB3B0005A03F6 /* OnboardItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardItemViewController.swift; sourceTree = "<group>"; };
+		BE8FA7792C8CB720005A03F6 /* OnboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +88,7 @@
 			children = (
 				BE221FEF2C8B07A200D2EAC7 /* Info.plist */,
 				BE221FEA2C8B07A200D2EAC7 /* Assets.xcassets */,
+				BE8FA7742C8CB382005A03F6 /* Images.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -107,7 +114,9 @@
 		BE221FF92C8B07DC00D2EAC7 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				BE8FA7782C8CB713005A03F6 /* Model */,
 				BE221FE52C8B07A100D2EAC7 /* OnboardingViewController.swift */,
+				BE8FA7762C8CB3B0005A03F6 /* OnboardItemViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -119,6 +128,14 @@
 				BE5520EF2C8B6A59009A8BF2 /* LoginInputFieldsView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		BE8FA7782C8CB713005A03F6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BE8FA7792C8CB720005A03F6 /* OnboardItem.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,6 +196,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE8FA7752C8CB382005A03F6 /* Images.xcassets in Resources */,
 				BE221FEB2C8B07A200D2EAC7 /* Assets.xcassets in Resources */,
 				BE221FEE2C8B07A200D2EAC7 /* Base in Resources */,
 			);
@@ -191,10 +209,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE8FA77A2C8CB720005A03F6 /* OnboardItem.swift in Sources */,
 				BE5520F02C8B6A59009A8BF2 /* LoginInputFieldsView.swift in Sources */,
 				BE221FE62C8B07A100D2EAC7 /* OnboardingViewController.swift in Sources */,
 				BE221FFE2C8B085A00D2EAC7 /* AppContainer.swift in Sources */,
 				BE221FE22C8B07A100D2EAC7 /* AppDelegate.swift in Sources */,
+				BE8FA7772C8CB3B0005A03F6 /* OnboardItemViewController.swift in Sources */,
 				BE5520EE2C8B0CF8009A8BF2 /* LoginViewController.swift in Sources */,
 				BE221FFC2C8B085500D2EAC7 /* AppRouter.swift in Sources */,
 			);
