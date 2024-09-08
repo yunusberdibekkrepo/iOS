@@ -76,6 +76,12 @@ final class LoginViewController: UIViewController {
         setUp()
         layout()
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        signInButton.configuration?.showsActivityIndicator = false
+    }
 }
 
 // MARK: - Private Methods
@@ -188,6 +194,11 @@ private extension LoginViewController {
 
         if username == "Kevin", password == "kevin" {
             signInButton.configuration?.showsActivityIndicator = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.signInButton.configuration?.showsActivityIndicator = false
+                appContainer.router.changeRootViewController(with: HomeSceneViewController())
+            }
         } else {
             configureErrorLabel(withMessage: "Incorrect username / passsword")
         }

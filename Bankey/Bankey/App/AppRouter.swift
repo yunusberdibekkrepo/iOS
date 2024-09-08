@@ -17,8 +17,6 @@ final class AppRouter {
 
     func didFinishLaunchingWithOptions() {
         hasOnboarded()
-
-        self.window.makeKeyAndVisible()
     }
 }
 
@@ -39,13 +37,21 @@ private extension AppRouter {
 // MARK: - Public Methods
 
 extension AppRouter {
-    func changeRootViewController(with rootViewController: UIViewController) {
+    func changeRootViewController(with rootViewController: UIViewController, animated: Bool = true) {
+        guard animated else {
+            self.window.rootViewController = rootViewController
+            self.window.makeKeyAndVisible()
+
+            return
+        }
+
+        window.rootViewController = UINavigationController(rootViewController: rootViewController)
+        window.makeKeyAndVisible()
+
         UIView.transition(with: window,
-                          duration: 0.5,
+                          duration: 0.4,
                           options: [.transitionFlipFromRight],
-                          animations: {
-                              self.window.rootViewController = UINavigationController(rootViewController: rootViewController)
-                          },
+                          animations: nil,
                           completion: nil)
     }
 }
