@@ -17,7 +17,7 @@ final class AppRouter {
     }
 
     func didFinishLaunchingWithOptions() {
-        self.window?.rootViewController = rootViewController ?? OnboardingViewController()
+        self.window?.rootViewController = UINavigationController(rootViewController: rootViewController ?? OnboardingViewController())
         self.window?.makeKeyAndVisible()
     }
 }

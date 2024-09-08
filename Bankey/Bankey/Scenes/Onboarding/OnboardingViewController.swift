@@ -7,23 +7,23 @@
 
 import UIKit
 
-final class OnboardingViewController: UIViewController {
-    let pageViewController: UIPageViewController
+final class OnboardingViewController: UIPageViewController {
+    private let pageControl: UIPageControl = {
+        let control = UIPageControl()
+        control.translatesAutoresizingMaskIntoConstraints = false
+        control.currentPageIndicatorTintColor = .white
+        control.backgroundColor = .purple
+
+        return control
+    }()
+
     var pages: [UIViewController] = []
-    var currentPage: UIViewController
+    var initialIndex: Int = 0
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-
-        for item in OnboardItem.items {
-            let controller = OnboardItemViewController(onboardItem: item)
-
-            pages.append(controller)
-        }
-
-        currentPage = pages.first!
-
-        super.init(nibName: nil, bundle: nil)
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey: Any]? = nil) {
+        super.init(transitionStyle: .scroll,
+                   navigationOrientation: navigationOrientation,
+                   options: nil)
     }
 
     @available(*, unavailable)
@@ -35,31 +35,50 @@ final class OnboardingViewController: UIViewController {
         super.viewDidLoad()
 
         setUp()
-        layout()
+        setUpPageControl()
     }
 }
 
 private extension OnboardingViewController {
     func setUp() {
         view.backgroundColor = .purple
-        addChild(pageViewController)
-        view.addSubview(pageViewController.view)
+        delegate = self
+        dataSource = self
 
-        pageViewController.didMove(toParent: self)
-        pageViewController.delegate = self
-        pageViewController.dataSource = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Next",
+            style: .plain,
+            target: self,
+            action: #selector(onTapNextButton)
+        )
+
+        pages = OnboardItem.items.map { OnboardItemViewController(onboardItem: $0) }
+        setViewControllers([pages[initialIndex]],
+                           direction: .forward,
+                           animated: true,
+                           completion: nil)
     }
 
-    func layout() {
-        NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: pageViewController.view.topAnchor),
-            view.leadingAnchor.constraint(equalTo: pageViewController.view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: pageViewController.view.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: pageViewController.view.bottomAnchor),
-        ])
+    func setUpPageControl() {
+        pageControl.numberOfPages = pages.count
+        pageControl.currentPage = initialIndex
 
-        pageViewController.setViewControllers([pages.first!], direction: .forward, animated: false, completion: nil)
-        currentPage = pages.first!
+        view.addSubview(pageControl)
+
+        NSLayoutConstraint.activate(
+            [
+                pageControl.widthAnchor.constraint(
+                    equalTo: view.widthAnchor
+                ),
+                pageControl.heightAnchor.constraint(
+                    equalTo: view.heightAnchor,
+                    multiplier: 0.05
+                ),
+                pageControl.bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor
+                )
+            ]
+        )
     }
 }
 
@@ -73,46 +92,62 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         getViewControllerNext(from: viewController)
     }
-
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        pages.count
-    }
-
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        pages.firstIndex(of: self.currentPage) ?? 0
-    }
 }
 
 // MARK: - OnboardingViewController + UIPageViewControllerDelegate
 
-extension OnboardingViewController: UIPageViewControllerDelegate {}
+extension OnboardingViewController: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard let controllers = pageViewController.viewControllers else { return }
+        guard let currentIndex = pages.firstIndex(of: controllers[0]) else { return }
+
+        pageControl.currentPage = currentIndex
+        changeNextButtonTitle(at: currentIndex)
+    }
+}
 
 // MARK: - OnboardingViewController + Actions
 
 private extension OnboardingViewController {
+    @objc func onTapPageControl() {
+        print("onTapPageControl")
+    }
+
+    @objc func onTapNextButton() {}
+
     func getViewControllerBefore(from controller: UIViewController) -> UIViewController? {
-        guard let currentIndex = pages.firstIndex(of: controller),
-              currentIndex != 0
-        else {
+        guard let currentIndex = pages.firstIndex(of: controller) else {
             return nil
         }
 
-        currentPage = pages[currentIndex - 1]
-        return currentPage
+        if currentIndex == 0 {
+            return nil
+        }
+
+        return pages[currentIndex - 1]
     }
 
     func getViewControllerNext(from controller: UIViewController) -> UIViewController? {
-        guard let currentIndex = pages.firstIndex(of: controller),
-              currentIndex + 1 < pages.count
-        else {
+        guard let currentIndex = pages.firstIndex(of: controller) else {
             return nil
         }
 
-        currentPage = pages[currentIndex + 1]
-        return currentPage
+        if currentIndex < pages.count - 1 {
+            return pages[currentIndex + 1]
+        }
+
+        return nil
+    }
+
+    func changeNextButtonTitle(at index: Int) {
+        if index == 2 {
+            navigationItem.rightBarButtonItem?.title = "Start"
+        } else {
+            navigationItem.rightBarButtonItem?.title = "Next"
+        }
     }
 }
 
 #Preview {
-    OnboardingViewController()
+    UINavigationController(rootViewController: OnboardingViewController())
 }
