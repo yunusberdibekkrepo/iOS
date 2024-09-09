@@ -115,11 +115,9 @@ private extension OnboardingViewController {
 
     @objc func onTapNextButton() {
         if pageControl.currentPage == (pages.count - 1) {
-            UserDefaults.standard.setValue(true, forKey: "hasOnboarded")
-            
+            LocalState.hasOnboarded = true
             appContainer.router.changeRootViewController(with: LoginViewController())
         }
-        print("Tıklandı index: \(pageControl.currentPage)")
     }
 
     func getViewControllerBefore(from controller: UIViewController) -> UIViewController? {

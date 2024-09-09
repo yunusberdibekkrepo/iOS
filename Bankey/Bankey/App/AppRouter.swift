@@ -24,9 +24,7 @@ final class AppRouter {
 
 private extension AppRouter {
     func hasOnboarded() {
-        let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
-
-        if hasOnboarded {
+        if LocalState.hasOnboarded {
             changeRootViewController(with: LoginViewController())
         } else {
             changeRootViewController(with: OnboardingViewController())
