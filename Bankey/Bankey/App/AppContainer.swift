@@ -11,6 +11,7 @@ let appContainer: AppContainer = .init(router: AppRouter())
 
 final class AppContainer {
     let router: AppRouter
+    let theme: AppTheme = .init()
 
     init(router: AppRouter) {
         self.router = router

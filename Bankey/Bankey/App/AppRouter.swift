@@ -12,7 +12,7 @@ final class AppRouter {
 
     init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window.backgroundColor = UIColor.systemBackground
+        window.backgroundColor = UIColor.systemBackground
     }
 
     func didFinishLaunchingWithOptions() {
@@ -37,8 +37,8 @@ private extension AppRouter {
 extension AppRouter {
     func changeRootViewController(with rootViewController: UIViewController, animated: Bool = true) {
         guard animated else {
-            self.window.rootViewController = rootViewController
-            self.window.makeKeyAndVisible()
+            window.rootViewController = rootViewController
+            window.makeKeyAndVisible()
 
             return
         }

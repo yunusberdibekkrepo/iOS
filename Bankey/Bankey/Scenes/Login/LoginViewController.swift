@@ -192,12 +192,12 @@ private extension LoginViewController {
             return
         }
 
-        if username == "Kevin", password == "kevin" {
+        if username == "Yunus", password == "yunus" {
             signInButton.configuration?.showsActivityIndicator = true
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.signInButton.configuration?.showsActivityIndicator = false
-                appContainer.router.changeRootViewController(with: HomeSceneViewController())
+                appContainer.router.changeRootViewController(with: MainViewController())
             }
         } else {
             configureErrorLabel(withMessage: "Incorrect username / passsword")
