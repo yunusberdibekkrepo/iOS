@@ -37,7 +37,9 @@ final class AccountSummaryViewController: UIViewController {
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-
+        tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseIdentifier)
+        tableView.rowHeight = AccountSummaryCell.rowHeight
+        tableView.tableFooterView = UIView() /// footer yok anlamında.
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
 
@@ -51,8 +53,8 @@ final class AccountSummaryViewController: UIViewController {
 
     private func setupTableHeaderView() {
         let header = AccountSummaryHeaderView(frame: .zero)
-        
-        ///UIView.layoutFittingCompressedSize ile en uygun height ayarlanıyor.
+
+        /// UIView.layoutFittingCompressedSize ile en uygun height ayarlanıyor.
         var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         size.width = UIScreen.main.bounds.width
         header.frame.size = size
@@ -63,10 +65,9 @@ final class AccountSummaryViewController: UIViewController {
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        var configuration = cell.defaultContentConfiguration()
-        configuration.text = games[indexPath.row]
-        cell.contentConfiguration = configuration
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseIdentifier, for: indexPath) as? AccountSummaryCell else {
+            fatalError("Unsupported cell type")
+        }
 
         return cell
     }
