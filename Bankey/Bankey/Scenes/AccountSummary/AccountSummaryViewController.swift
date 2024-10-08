@@ -28,9 +28,10 @@ final class AccountSummaryViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .systemGreen
+        view.backgroundColor = .systemBackground
 
         setupTableView()
+        setupTableHeaderView()
     }
 
     private func setupTableView() {
@@ -46,6 +47,17 @@ final class AccountSummaryViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+
+    private func setupTableHeaderView() {
+        let header = AccountSummaryHeaderView(frame: .zero)
+        
+        ///UIView.layoutFittingCompressedSize ile en uygun height ayarlanıyor.
+        var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        size.width = UIScreen.main.bounds.width
+        header.frame.size = size
+
+        tableView.tableHeaderView = header
     }
 }
 
