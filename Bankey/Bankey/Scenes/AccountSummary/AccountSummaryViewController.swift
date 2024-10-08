@@ -66,7 +66,6 @@ extension AccountSummaryViewController: UITableViewDataSource {
         let cell = UITableViewCell()
         var configuration = cell.defaultContentConfiguration()
         configuration.text = games[indexPath.row]
-        configuration.secondaryText = games[indexPath.row].count.description
         cell.contentConfiguration = configuration
 
         return cell
