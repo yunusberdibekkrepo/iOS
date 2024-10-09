@@ -17,6 +17,11 @@ class AccountSummaryCell: UITableViewCell {
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
+        let balance: Decimal
+
+        var balanceAsAttributedString: NSAttributedString {
+            return CurrencyFormatter().makeAttributedCurrency(balance)
+        }
     }
 
     static let reuseIdentifier: String = "AccountSummaryCell"
@@ -111,7 +116,6 @@ private extension AccountSummaryCell {
         balanceStackView.addArrangedSubview(balanceLabel)
         balanceStackView.addArrangedSubview(balanceAmountLabel)
 
-        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "23")
         dividerView.backgroundColor = appContainer.theme.appColor
         chevronImageView.image = UIImage(systemName: "chevron.right")?.withTintColor(appContainer.theme.appColor, renderingMode: .alwaysOriginal)
     }
@@ -139,27 +143,11 @@ private extension AccountSummaryCell {
     }
 }
 
-private extension AccountSummaryCell {
-    func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
-        let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
-        let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
-        let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .baselineOffset: 8]
-
-        let rootString = NSMutableAttributedString(string: "$", attributes: dollarSignAttributes)
-        let dollarString = NSAttributedString(string: dollars, attributes: dollarAttributes)
-        let centString = NSAttributedString(string: cents, attributes: centAttributes)
-
-        rootString.append(dollarString)
-        rootString.append(centString)
-
-        return rootString
-    }
-}
-
 extension AccountSummaryCell {
     func configure(with viewModel: ViewModel) {
         typeLabel.text = viewModel.accountType.rawValue
         nameLabel.text = viewModel.accountName
+        balanceAmountLabel.attributedText = viewModel.balanceAsAttributedString
 
         switch viewModel.accountType {
         case .Banking:
