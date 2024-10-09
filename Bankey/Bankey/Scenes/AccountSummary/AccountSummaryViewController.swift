@@ -10,11 +10,7 @@ import UIKit
 final class AccountSummaryViewController: UIViewController {
     // MARK: - Variables
 
-    let games = [
-        "Pacman",
-        "Space Invaders",
-        "Space Patrol",
-    ]
+    var accounts: [AccountSummaryCell.ViewModel] = []
 
     // MARK: - UI Components
 
@@ -32,6 +28,7 @@ final class AccountSummaryViewController: UIViewController {
 
         setupTableView()
         setupTableHeaderView()
+        fetchData()
     }
 
     private func setupTableView() {
@@ -61,19 +58,37 @@ final class AccountSummaryViewController: UIViewController {
 
         tableView.tableHeaderView = header
     }
+
+    private func fetchData() {
+        let savings = AccountSummaryCell.ViewModel(accountType: .Banking,
+                                                   accountName: "Basic Savings")
+        let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
+                                                accountName: "Visa Avion Card")
+        let investment = AccountSummaryCell.ViewModel(accountType: .Investment,
+                                                      accountName: "Tax-Free Saver")
+
+        accounts.append(savings)
+        accounts.append(visa)
+        accounts.append(investment)
+    }
 }
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard !accounts.isEmpty else { return UITableViewCell() }
+
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseIdentifier, for: indexPath) as? AccountSummaryCell else {
             fatalError("Unsupported cell type")
         }
+
+        let account = accounts[indexPath.row]
+        cell.configure(with: account)
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games.count
+        return accounts.count
     }
 }
 

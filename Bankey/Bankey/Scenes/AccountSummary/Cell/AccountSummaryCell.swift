@@ -8,8 +8,20 @@
 import UIKit
 
 class AccountSummaryCell: UITableViewCell {
+    enum AccountType: String {
+        case Banking
+        case CreditCard
+        case Investment
+    }
+
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+    }
+
     static let reuseIdentifier: String = "AccountSummaryCell"
     static let rowHeight: CGFloat = 112
+    let viewModel: ViewModel? = nil
 
     lazy var typeLabel: UILabel = {
         let label = UILabel()
@@ -127,8 +139,8 @@ private extension AccountSummaryCell {
     }
 }
 
-extension AccountSummaryCell {
-    private func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
+private extension AccountSummaryCell {
+    func makeFormattedBalance(dollars: String, cents: String) -> NSMutableAttributedString {
         let dollarSignAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout), .baselineOffset: 8]
         let dollarAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .title1)]
         let centAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .baselineOffset: 8]
@@ -141,5 +153,24 @@ extension AccountSummaryCell {
         rootString.append(centString)
 
         return rootString
+    }
+}
+
+extension AccountSummaryCell {
+    func configure(with viewModel: ViewModel) {
+        typeLabel.text = viewModel.accountType.rawValue
+        nameLabel.text = viewModel.accountName
+
+        switch viewModel.accountType {
+        case .Banking:
+            dividerView.backgroundColor = appContainer.theme.appColor
+            balanceLabel.text = "Current balance"
+        case .CreditCard:
+            dividerView.backgroundColor = .systemOrange
+            balanceLabel.text = "Current balance"
+        case .Investment:
+            dividerView.backgroundColor = .purple
+            balanceLabel.text = "Value"
+        }
     }
 }
