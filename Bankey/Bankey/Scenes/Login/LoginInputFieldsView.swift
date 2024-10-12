@@ -8,6 +8,8 @@
 import UIKit
 
 final class LoginInputFieldsView: UIView {
+    let passwordToggleButton: UIButton = .init(type: .custom)
+
     let vStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -55,6 +57,15 @@ final class LoginInputFieldsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func enablePasswordToggle() {
+        passwordToggleButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        passwordToggleButton.setImage(UIImage(systemName: "eye.slash.fill"), for: .selected)
+        passwordToggleButton.addTarget(self, action: #selector(togglePasswordField), for: .touchUpInside)
+
+        passwordField.rightView = passwordToggleButton
+        passwordField.rightViewMode = .always
+    }
 }
 
 private extension LoginInputFieldsView {
@@ -91,6 +102,12 @@ private extension LoginInputFieldsView {
 
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
+
+    @objc
+    func togglePasswordField() {
+        passwordField.isSecureTextEntry.toggle()
+        passwordToggleButton.isSelected.toggle()
+    }
 }
 
 // MARK: - LoginView + UITextFieldDelegate
@@ -99,6 +116,7 @@ extension LoginInputFieldsView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         usernameField.endEditing(true)
         passwordField.endEditing(true)
+        
         return true
     }
 

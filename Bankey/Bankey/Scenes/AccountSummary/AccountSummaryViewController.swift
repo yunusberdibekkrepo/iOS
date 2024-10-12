@@ -14,6 +14,13 @@ final class AccountSummaryViewController: UIViewController {
 
     // MARK: - UI Components
 
+    lazy var logoutBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
+        barButtonItem.tintColor = .label
+
+        return barButtonItem
+    }()
+
     var tableView = UITableView()
 
     // MARK: - Lifecycle
@@ -25,6 +32,7 @@ final class AccountSummaryViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = appContainer.theme.appColor
+        navigationItem.rightBarButtonItem = logoutBarButtonItem
 
         setupTableView()
         setupTableHeaderView()
@@ -42,7 +50,7 @@ final class AccountSummaryViewController: UIViewController {
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -110,4 +118,11 @@ extension AccountSummaryViewController: UITableViewDataSource {
 
 extension AccountSummaryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+}
+
+extension AccountSummaryViewController {
+    @objc
+    func logout() {
+        NotificationCenter.default.post(name: .logout, object: nil)
+    }
 }

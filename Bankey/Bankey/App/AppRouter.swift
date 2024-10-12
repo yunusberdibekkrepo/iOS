@@ -13,6 +13,8 @@ final class AppRouter {
     init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         window.backgroundColor = UIColor.systemBackground
+
+        registerForNotifications()
     }
 
     func didFinishLaunchingWithOptions() {
@@ -23,14 +25,25 @@ final class AppRouter {
 // MARK: - Private Methods
 
 private extension AppRouter {
+    func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(hasLogout), name: .logout, object: nil)
+    }
+
     func hasOnboarded() {
         if LocalState.hasOnboarded {
-            let controller = AccountSummaryViewController()
+            let controller = LoginViewController()
 
             changeRootViewController(with: controller, animated: false)
         } else {
             changeRootViewController(with: OnboardingViewController())
         }
+    }
+
+    @objc
+    func hasLogout() {
+        let controller = LoginViewController()
+
+        changeRootViewController(with: controller, animated: true)
     }
 }
 
