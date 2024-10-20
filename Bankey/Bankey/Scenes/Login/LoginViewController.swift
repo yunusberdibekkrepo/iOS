@@ -216,12 +216,12 @@ private extension LoginViewController {
             return
         }
 
-        if username.isEmpty || password.isEmpty {
-            configureErrorLabel(withMessage: "Username / password cannot be blank")
-            return
-        }
+        /*     if username.isEmpty || password.isEmpty {
+             configureErrorLabel(withMessage: "Username / password cannot be blank")
+             return
+         }*/
 
-        if username == "Yunus", password == "yunus" {
+        if username == "", password == "" {
             signInButton.configuration?.showsActivityIndicator = true
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in

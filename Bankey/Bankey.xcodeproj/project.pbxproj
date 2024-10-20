@@ -55,6 +55,7 @@
 		AA984D042CB16BB2005C34D6 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA984D082CB16BB2005C34D6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		AA984D0B2CB16BB5005C34D6 /* Core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Core; sourceTree = "<group>"; };
 		BA8EE4D72CB72010001AED5A /* BankeyTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BankeyTests; sourceTree = "<group>"; };
+		BADC93FD2CC4658E00C6E071 /* Product */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Product; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +99,7 @@
 			children = (
 				AA984CD92CB16A21005C34D6 /* App */,
 				AA984D0B2CB16BB5005C34D6 /* Core */,
+				BADC93FD2CC4658E00C6E071 /* Product */,
 				AA984D042CB16BB2005C34D6 /* Resources */,
 				AA984CF32CB16BAF005C34D6 /* Scenes */,
 				AA984CDE2CB16A5C005C34D6 /* Utils */,
@@ -149,6 +151,7 @@
 				AA984CF32CB16BAF005C34D6 /* Scenes */,
 				AA984D042CB16BB2005C34D6 /* Resources */,
 				AA984D0B2CB16BB5005C34D6 /* Core */,
+				BADC93FD2CC4658E00C6E071 /* Product */,
 			);
 			name = Bankey;
 			productName = Bankey;
