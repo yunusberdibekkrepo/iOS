@@ -8,8 +8,20 @@
 import UIKit
 
 class AccountSummaryHeaderView: UIView {
-    @IBOutlet var contentView: UIView!
+    struct ViewModel {
+        let welcomeMessage: String
+        let name: String
+        let date: Date
 
+        var dateFormatted: String {
+            date.monthDayYearString
+        }
+    }
+
+    @IBOutlet var contentView: UIView!
+    @IBOutlet var welcomeLabel: UILabel!
+    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var nameLabel: UILabel!
     let shakeyBellView: ShakeyBellView = .init()
 
     override init(frame: CGRect) {
@@ -52,5 +64,11 @@ class AccountSummaryHeaderView: UIView {
             shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
             shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+
+    func configure(with viewModel: ViewModel) {
+        welcomeLabel.text = viewModel.welcomeMessage
+        nameLabel.text = viewModel.name
+        dateLabel.text = viewModel.dateFormatted
     }
 }

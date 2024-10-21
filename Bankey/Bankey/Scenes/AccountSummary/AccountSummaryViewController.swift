@@ -10,7 +10,13 @@ import UIKit
 final class AccountSummaryViewController: UIViewController {
     // MARK: - Variables
 
-    var accounts: [AccountSummaryCell.ViewModel] = []
+    var profile: Profile?
+    var accounts: [Account] = []
+
+    var headerViewModel = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Welcome",
+                                                             name: "Yunus Emre",
+                                                             date: .now)
+    var accountCellViewModels: [AccountSummaryCell.ViewModel] = []
 
     // MARK: - UI Components
 
@@ -20,6 +26,8 @@ final class AccountSummaryViewController: UIViewController {
 
         return barButtonItem
     }()
+
+    var headerView = AccountSummaryHeaderView(frame: .zero)
 
     var tableView = UITableView()
 
@@ -36,7 +44,7 @@ final class AccountSummaryViewController: UIViewController {
 
         setupTableView()
         setupTableHeaderView()
-        fetchData()
+        fetchDataAndLoadViews()
     }
 
     private func setupTableView() {
@@ -58,61 +66,31 @@ final class AccountSummaryViewController: UIViewController {
     }
 
     private func setupTableHeaderView() {
-        let header = AccountSummaryHeaderView(frame: .zero)
-
         /// UIView.layoutFittingCompressedSize ile en uygun height ayarlanıyor.
-        var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        var size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         size.width = UIScreen.main.bounds.width
-        header.frame.size = size
+        headerView.frame.size = size
 
-        tableView.tableHeaderView = header
-    }
-
-    private func fetchData() {
-        let savings = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                   accountName: "Basic Savings",
-                                                   balance: 929466.23)
-        let chequing = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                    accountName: "No-Fee All-In Chequing",
-                                                    balance: 17562.44)
-        let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
-                                                accountName: "Visa Avion Card",
-                                                balance: 412.83)
-        let masterCard = AccountSummaryCell.ViewModel(accountType: .CreditCard,
-                                                      accountName: "Student Mastercard",
-                                                      balance: 50.83)
-        let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
-                                                       accountName: "Tax-Free Saver",
-                                                       balance: 2000.00)
-        let investment2 = AccountSummaryCell.ViewModel(accountType: .Investment,
-                                                       accountName: "Growth Fund",
-                                                       balance: 15000.00)
-
-        accounts.append(savings)
-        accounts.append(chequing)
-        accounts.append(visa)
-        accounts.append(masterCard)
-        accounts.append(investment1)
-        accounts.append(investment2)
+        tableView.tableHeaderView = headerView
     }
 }
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !accounts.isEmpty else { return UITableViewCell() }
+        guard !accountCellViewModels.isEmpty else { return UITableViewCell() }
 
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseIdentifier, for: indexPath) as? AccountSummaryCell else {
             fatalError("Unsupported cell type")
         }
 
-        let account = accounts[indexPath.row]
+        let account = accountCellViewModels[indexPath.row]
         cell.configure(with: account)
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return accounts.count
+        return accountCellViewModels.count
     }
 }
 
@@ -124,5 +102,49 @@ extension AccountSummaryViewController {
     @objc
     func logout() {
         NotificationCenter.default.post(name: .logout, object: nil)
+    }
+}
+
+// MARK: - Networking
+
+extension AccountSummaryViewController {
+    private func fetchDataAndLoadViews() {
+        fetchProfile(forUserId: "1") { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile)
+                self.tableView.reloadData()
+
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+
+        fetchAccounts(forUserId: "1") { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+                self.configureTableCells(with: accounts)
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    private func configureTableCells(with accounts: [Account]) {
+        accountCellViewModels = accounts.map {
+            AccountSummaryCell.ViewModel(accountType: $0.type,
+                                         accountName: $0.name,
+                                         balance: $0.amount)
+        }
+    }
+
+    private func configureTableHeaderView(with profile: Profile) {
+        let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
+                                                    name: profile.firstName,
+                                                    date: Date())
+        headerView.configure(with: vm)
     }
 }
