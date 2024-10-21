@@ -28,8 +28,8 @@ final class AccountSummaryViewController: UIViewController {
     }()
 
     var headerView = AccountSummaryHeaderView(frame: .zero)
-
     var tableView = UITableView()
+    let refreshControl = UIRefreshControl()
 
     // MARK: - Lifecycle
 
@@ -44,6 +44,7 @@ final class AccountSummaryViewController: UIViewController {
 
         setupTableView()
         setupTableHeaderView()
+        setupRefreshControl()
         fetchData()
     }
 
@@ -73,6 +74,12 @@ final class AccountSummaryViewController: UIViewController {
 
         tableView.tableHeaderView = headerView
     }
+
+    private func setupRefreshControl() {
+        refreshControl.tintColor = appContainer.theme.appColor
+        refreshControl.addTarget(self, action: #selector(refreshContent), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
 }
 
 extension AccountSummaryViewController: UITableViewDataSource {
@@ -99,9 +106,12 @@ extension AccountSummaryViewController: UITableViewDelegate {
 }
 
 extension AccountSummaryViewController {
-    @objc
-    func logout() {
+    @objc func logout() {
         NotificationCenter.default.post(name: .logout, object: nil)
+    }
+
+    @objc func refreshContent() {
+        fetchData()
     }
 }
 
@@ -110,10 +120,23 @@ extension AccountSummaryViewController {
 extension AccountSummaryViewController {
     private func fetchData() {
         let group = DispatchGroup()
+        let userId = String(Int.random(in: 1 ..< 4))
 
         group.enter()
+        fetchProfile(forUserId: userId) { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile)
+            case .failure(let failure):
+                print(failure.localizedDescription)
+            }
 
-        fetchAccounts(forUserId: "1") { result in
+            group.leave()
+        }
+
+        group.enter()
+        fetchAccounts(forUserId: userId) { result in
             switch result {
             case .success(let accounts):
                 self.accounts = accounts
@@ -127,6 +150,7 @@ extension AccountSummaryViewController {
 
         group.notify(queue: .main) { // Dispatch group'a giren iki işlem bittikten sonra çalışır.
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
 
