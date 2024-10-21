@@ -17,6 +17,7 @@ final class AccountSummaryViewController: UIViewController {
                                                              name: "Yunus Emre",
                                                              date: .now)
     var accountCellViewModels: [AccountSummaryCell.ViewModel] = []
+    var isLoaded = false
 
     // MARK: - UI Components
 
@@ -45,6 +46,7 @@ final class AccountSummaryViewController: UIViewController {
         setupTableView()
         setupTableHeaderView()
         setupRefreshControl()
+        setupSkelatons()
         fetchData()
     }
 
@@ -53,6 +55,7 @@ final class AccountSummaryViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseIdentifier)
+        tableView.register(SkeletonCell.self, forCellReuseIdentifier: SkeletonCell.reuseID)
         tableView.rowHeight = AccountSummaryCell.rowHeight
         tableView.tableFooterView = UIView() /// footer yok anlamında.
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,18 +83,32 @@ final class AccountSummaryViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshContent), for: .valueChanged)
         tableView.refreshControl = refreshControl
     }
+
+    private func setupSkelatons() {
+        let row = Account.makeSkelaton()
+        accounts = Array(repeating: row, count: 10)
+
+        configureTableCells(with: accounts)
+    }
 }
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !accountCellViewModels.isEmpty else { return UITableViewCell() }
+        let account = accountCellViewModels[indexPath.row]
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseIdentifier, for: indexPath) as? AccountSummaryCell else {
-            fatalError("Unsupported cell type")
+        if isLoaded {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.reuseIdentifier, for: indexPath) as? AccountSummaryCell else {
+                fatalError("Unsupported cell type")
+            }
+
+            cell.configure(with: account)
+            return cell
         }
 
-        let account = accountCellViewModels[indexPath.row]
-        cell.configure(with: account)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SkeletonCell.reuseID, for: indexPath) as? SkeletonCell else {
+            fatalError("Unsupported cell type")
+        }
 
         return cell
     }
@@ -111,7 +128,16 @@ extension AccountSummaryViewController {
     }
 
     @objc func refreshContent() {
+        reset()
+        setupSkelatons()
+        tableView.reloadData()
         fetchData()
+    }
+
+    private func reset() {
+        profile = nil
+        accounts = []
+        isLoaded = false
     }
 }
 
@@ -127,7 +153,6 @@ extension AccountSummaryViewController {
             switch result {
             case .success(let profile):
                 self.profile = profile
-                self.configureTableHeaderView(with: profile)
             case .failure(let failure):
                 print(failure.localizedDescription)
             }
@@ -140,7 +165,6 @@ extension AccountSummaryViewController {
             switch result {
             case .success(let accounts):
                 self.accounts = accounts
-                self.configureTableCells(with: accounts)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -148,9 +172,15 @@ extension AccountSummaryViewController {
             group.leave()
         }
 
-        group.notify(queue: .main) { // Dispatch group'a giren iki işlem bittikten sonra çalışır.
-            self.tableView.reloadData()
+        // Dispatch group'a giren iki işlem bittikten sonra çalışır.
+        group.notify(queue: .main) {
             self.tableView.refreshControl?.endRefreshing()
+
+            guard let profile = self.profile else { return }
+            self.isLoaded = true
+            self.configureTableHeaderView(with: profile)
+            self.configureTableCells(with: self.accounts)
+            self.tableView.reloadData()
         }
     }
 
