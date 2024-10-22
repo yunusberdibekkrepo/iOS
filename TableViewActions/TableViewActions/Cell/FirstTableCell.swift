@@ -10,9 +10,12 @@ import UIKit
 final class FirstTableCell: UITableViewCell {
     static let reuseIdentifier: String = "FirstTableCell"
 
+    var nameTextFieldCallBack: ((String) -> Void)?
+
     lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.tag = 0
         textField.font = .preferredFont(forTextStyle: .subheadline)
         textField.placeholder = "Name"
 
@@ -22,6 +25,7 @@ final class FirstTableCell: UITableViewCell {
     lazy var descriptionTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.tag = 1
         textField.font = .preferredFont(forTextStyle: .subheadline)
         textField.placeholder = "Description"
 
@@ -62,6 +66,8 @@ final class FirstTableCell: UITableViewCell {
         backgroundColor = .systemBackground
         layer.cornerRadius = 8
 
+        nameTextField.delegate = self
+
         setupVStack()
     }
 
@@ -78,5 +84,23 @@ final class FirstTableCell: UITableViewCell {
             contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: vStack.bottomAnchor, multiplier: 2),
             divider.heightAnchor.constraint(equalToConstant: 1)
         ])
+    }
+}
+
+extension FirstTableCell: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+
+        print("Tag: \(textField.tag)")
+        nameTextFieldCallBack?(text)
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, let textRange = Range(range, in: text) {
+            let updatedText = text.replacingCharacters(in: textRange, with: string)
+            nameTextFieldCallBack?(updatedText)
+        }
+
+        return true
     }
 }
