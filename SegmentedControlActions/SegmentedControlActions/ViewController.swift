@@ -105,6 +105,14 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == countriesTableView {
+            let selectedCountry = countries[indexPath.row]
+            print("SelectedCountry: \(selectedCountry)")
+        } else if tableView == citiesTableView {
+            let selectedCity = cities[indexPath.row]
+            print("SelectedCity: \(selectedCity)")
+        }
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
